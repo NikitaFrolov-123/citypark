@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="menu-hero">
+    <div class="container">
+        <h1>Меню</h1>
+        <p>Авторская кухня с вниманием к деталям</p>
+    </div>
+</section>
+
+<section class="menu-section">
+    <div class="container">
+        <div class="menu-search">
+            <input type="text" class="search-input" id="searchDishes" placeholder="🔍 Поиск по названию блюда...">
+        </div>
+
+        <div class="menu-filters">
+            <button class="filter-btn active" data-category="all">Все</button>
+            {% for category in categories %}
+            <button class="filter-btn" data-category="{{ category.slug }}">{{ category.name }}</button>
+            {% endfor %}
+        </div>
+
+        <div class="menu-sort">
+            <span>Сортировать:</span>
+            <select class="sort-select" id="sortDishes">
+                <option value="default">По умолчанию</option>
+                <option value="price-asc">По цене: сначала дешёвые</option>
+                <option value="price-desc">По цене: сначала дорогие</option>
+                <option value="name">По названию</option>
+            </select>
+        </div>
+
+        <div class="menu-grid" id="dishesGrid">
+            {% if dishes %}
+                {% for dish in dishes %}
+                <article class="dish-card" data-category="{% if dish.category %}{{ dish.category.slug }}{% else %}none{% endif %}" data-dish-name="{{ dish.name }}">
+                    <a href="{% url 'dish_detail' dish.id %}" class="dish-link">
+                        <div class="dish-image">
+                            {% if dish.image %}
+                                <img src="{{ dish.image.url }}" alt="{{ dish.name }}">
+                            {% else %}
+                                <img src="{% static 'img/hero.jpg' %}" alt="{{ dish.name }}">
+                            {% endif %}
+                        </div>
+
+                        <div class="dish-body">
+                            <div class="dish-header">
+                                <h3>{{ dish.name }}</h3>
+                                {% if dish.is_popular %}
+                                    <span class="popular-tag">⭐ Популярное</span>
+                                {% endif %}
+                            </div>
+
+                            <p>{{ dish.description }}</p>
+
+                            {% with reviews_count=dish.reviews.count %}
+                            {% if reviews_count > 0 %}
+                            <div class="dish-rating">
+                                <span class="rating-stars">⭐⭐⭐⭐⭐</span>
+                                <span class="rating-count">({{ reviews_count }} отзывов)</span>
+                            </div>
+                            {% endif %}
+                            {% endwith %}
+
+                            <div class="dish-bottom">
+                                <span>{{ dish.price }} ₽</span>
+                            </div>
+
+                            {% if not dish.is_available %}
+                            <div class="dish-unavailable">
+                                <span>⚠️ Сейчас недоступно</span>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </a>
+
+                    <div class="dish-actions">
+                        <div class="quantity-control">
+                            <button class="qty-btn qty-minus" data-dish-id="{{ dish.id }}">-</button>
+                            <input type="number" class="qty-input" value="1" min="1" max="10" data-dish-id="{{ dish.id }}">
+                            <button class="qty-btn qty-plus" data-dish-id="{{ dish.id }}">+</button>
+                        </div>
+
+                        <button class="add-to-cart-btn" data-dish-id="{{ dish.id }}" data-quantity="1">
+                            <span class="btn-icon">🛒</span>
+                            <span class="btn-text">В корзину</span>
+                        </button>
+                    </div>
+                </article>
+                {% endfor %}
+            {% else %}
+                <div class="menu-empty">
+                    <p>В меню пока нет блюд</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

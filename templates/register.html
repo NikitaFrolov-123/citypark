@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="form-section">
+    <div class="container">
+        <div class="form-card">
+            <h1>Регистрация</h1>
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn">Создать аккаунт</button>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,168 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="home-hero">
+    <div class="hero-overlay"></div>
+    <div class="container hero-grid">
+        <div class="hero-left">
+            <p class="hero-kicker">Restaurant • Lounge • Dinner</p>
+            <h1>Вечера, которые хочется повторить</h1>
+            <p class="hero-text">
+                Современная кухня, тёплая атмосфера и блюда, которые выбирают снова и снова.
+                Здесь удобно встретиться с друзьями, провести ужин и отметить важный момент.
+            </p>
+
+            <div class="hero-actions">
+                <a class="btn" href="{% url 'menu' %}">Посмотреть меню</a>
+                <a class="outline-btn" href="{% url 'booking' %}">Забронировать стол</a>
+                <a class="outline-btn" href="{% url 'contacts' %}">Оставить отзыв</a>
+            </div>
+
+            <div class="hero-info">
+                <div class="hero-info-card">
+                    <span>График работы</span>
+                    <strong>Ежедневно</strong>
+                    <p>12:00 — 00:00</p>
+                </div>
+
+                <div class="hero-info-card">
+                    <span>Формат</span>
+                    <strong>Уютный ресторан</strong>
+                    <p>Для ужинов, встреч и особых вечеров</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="hero-right">
+            <div class="hero-main-photo">
+                {% if hero_dish and hero_dish.image %}
+                    <img src="{{ hero_dish.image.url }}" alt="{{ hero_dish.name }}">
+                {% else %}
+                    <img src="{% static 'img/hero.jpg' %}" alt="Интерьер ресторана CityPark">
+                {% endif %}
+            </div>
+
+            {% if hero_dish %}
+            <div class="hero-mini-cards">
+                <div class="mini-card">
+                    <span>Блюдо дня</span>
+                    <strong>{{ hero_dish.name }}</strong>
+                    <p>{{ hero_dish.description|truncatechars:110 }}</p>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<section class="section features-section">
+    <div class="container">
+        <div class="section-title">
+            <h2>Почему выбирают нас</h2>
+            <p>Три причины, по которым гости возвращаются снова.</p>
+        </div>
+
+        <div class="features-grid">
+            <article class="feature-card">
+                <h3>Авторская кухня</h3>
+                <p>Блюда с понятным вкусом, красивой подачей и аккуратным балансом.</p>
+            </article>
+
+            <article class="feature-card">
+                <h3>Комфортная атмосфера</h3>
+                <p>Тихое пространство для ужина, встречи или спокойного вечера.</p>
+            </article>
+
+            <article class="feature-card">
+                <h3>Быстрая бронь</h3>
+                <p>Удобно забронировать столик и заранее спланировать свой визит.</p>
+            </article>
+        </div>
+    </div>
+</section>
+
+{% if dishes %}
+<section class="section dishes-section">
+    <div class="container">
+        <div class="section-title">
+            <h2>Популярные блюда</h2>
+            <p>Несколько позиций из меню, чтобы сразу увидеть стиль кухни.</p>
+        </div>
+
+        <div class="dishes-grid">
+            {% for dish in dishes %}
+            <article class="dish-card">
+                <div class="dish-image">
+                    {% if dish.image %}
+                        <img src="{{ dish.image.url }}" alt="{{ dish.name }}">
+                    {% else %}
+                        <img src="{% static 'img/hero.jpg' %}" alt="{{ dish.name }}">
+                    {% endif %}
+                </div>
+
+                <div class="dish-body">
+                    <h3>{{ dish.name }}</h3>
+                    <p>{{ dish.description }}</p>
+                    <div class="dish-bottom">
+                        <span>{{ dish.price }} ₽</span>
+                    </div>
+                    <button class="add-to-cart-btn" data-dish-id="{{ dish.id }}">
+                        <span class="btn-icon">🛒</span>
+                        <span class="btn-text">В корзину</span>
+                    </button>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<section class="section about-strip">
+    <div class="container strip-inner">
+        <div>
+            <h2>О ресторане CityPark</h2>
+            <p>
+                Мы создаём место, где хочется задержаться подольше: вкусная еда, спокойный ритм и внимание к деталям.
+            </p>
+        </div>
+        <a class="btn" href="{% url 'about' %}">Подробнее</a>
+    </div>
+</section>
+
+<section class="cta-section">
+    <div class="container cta-container">
+        <div class="cta-content">
+            <h2>Хотите забронировать стол?</h2>
+            <p>Выберите удобное время и оформите бронь за пару кликов. Мы подтвердим бронь в течение 5 минут.</p>
+            <div class="cta-buttons">
+                <a class="btn" href="{% url 'booking' %}">Забронировать сейчас</a>
+                <a class="outline-btn" href="{% url 'contacts' %}">Оставить отзыв</a>
+            </div>
+        </div>
+        <div class="cta-info">
+            <div class="cta-info-item">
+                <span>📞</span>
+                <strong>Телефон</strong>
+                <p>+7 (999) 000-00-00</p>
+            </div>
+            <div class="cta-info-item">
+                <span>🕐</span>
+                <strong>Часы работы</strong>
+                <p>Ежедневно 12:00 — 00:00</p>
+            </div>
+            <div class="cta-info-item">
+                <span>📍</span>
+                <strong>Адрес</strong>
+                <p>ул. Примерная, 15</p>
+            </div>
+            <div class="cta-info-item">
+                <span>⭐</span>
+                <strong>Рейтинг</strong>
+                <p>4.8 · 500+ отзывов</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

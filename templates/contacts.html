@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="contacts-page" id="top">
+    <div class="container contacts-hero">
+        <p class="contacts-kicker">Contacts</p>
+        <h1>CityPark</h1>
+        <p class="contacts-lead">
+            Премиальный ресторан в Москве с атмосферой уюта, сильной кухней и вниманием к деталям.
+        </p>
+    </div>
+
+    <div class="container contacts-layout">
+        <div class="contacts-card">
+            <h2>Адрес</h2>
+            <p>г. Москва, 1-й Красногвардейский проезд, 15</p>
+            <p>Москва-Сити, башня Меркурий, 8-й этаж</p>
+            <a class="contacts-link" href="#">Построить маршрут</a>
+        </div>
+
+        <div class="contacts-card">
+            <h2>Часы работы</h2>
+            <ul class="contacts-list">
+                <li>Пн–Чт: 12:00 — 00:00</li>
+                <li>Пт: 12:00 — 02:00</li>
+                <li>Сб: 12:00 — 02:00</li>
+                <li>Вс: 12:00 — 00:00</li>
+            </ul>
+        </div>
+
+        <div class="contacts-card">
+            <h2>Телефон</h2>
+            <a class="phone" href="tel:+74952275558">+7 (495) 227-55-58</a>
+            <p>Бронь столиков, доставка, вопросы по банкетам.</p>
+        </div>
+
+        <div class="contacts-card">
+            <h2>Email</h2>
+            <a class="contacts-link" href="mailto:info@citypark.ru">info@citypark.ru</a>
+            <p>Пишите по вопросам бронирования, сотрудничества и мероприятий.</p>
+        </div>
+    </div>
+
+    <div class="container contacts-map-wrap">
+        <div class="contacts-card map-card">
+            <h2>Как нас найти</h2>
+            <p>Мы находимся в деловом центре города, рядом с метро и удобной парковкой.</p>
+            <iframe
+                class="contacts-map"
+                src="https://www.google.com/maps?q=1-%D0%B9%20%D0%9A%D1%80%D0%B0%D1%81%D0%BD%D0%BE%D0%B3%D0%B2%D0%B0%D1%80%D0%B4%D0%B5%D0%B9%D1%81%D0%BA%D0%B8%D0%B9%20%D0%BF%D1%80%D0%BE%D0%B5%D0%B7%D0%B4%2C%2015%2C%20%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0&output=embed"
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+    </div>
+
+    <div class="container contacts-actions">
+        <a class="btn" href="{% url 'booking' %}">Забронировать столик</a>
+        <a class="outline-btn" href="#top">Наверх</a>
+    </div>
+</section>
+{% endblock %}

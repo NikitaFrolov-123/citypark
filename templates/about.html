@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="about-hero">
+    <div class="container about-hero-grid">
+        <div class="about-hero-text">
+            <span class="hero-kicker">О нас</span>
+            <h1>CityPark — ресторан, куда хочется возвращаться</h1>
+            <p>
+                Мы создаём место, где вкусная еда, уютная атмосфера и внимание к деталям
+                превращают обычный ужин в приятный вечер.
+            </p>
+            <div class="about-hero-actions">
+                <a class="btn" href="{% url 'menu' %}">Смотреть меню</a>
+                <a class="outline-btn" href="{% url 'booking' %}">Забронировать стол</a>
+            </div>
+        </div>
+
+        <div class="about-hero-image">
+            <img src="{% static 'img/about-hero.jpg' %}" alt="Интерьер ресторана CityPark">
+        </div>
+    </div>
+</section>
+
+<section class="section about-story">
+    <div class="container about-story-grid">
+        <div class="about-story-images">
+            <img src="{% static 'img/about-1.jpg' %}" alt="Блюдо CityPark">
+            <img src="{% static 'img/about-2.jpg' %}" alt="Интерьер CityPark">
+            <img src="{% static 'img/about-3.jpg' %}" alt="Подача блюд CityPark">
+        </div>
+
+        <div class="about-story-text">
+            <span class="section-tag">Наша история</span>
+            <h2>Кухня, стиль и атмосфера в одном месте</h2>
+            <p>
+                CityPark появился как идея сделать ресторан, где одинаково важны
+                и вкус, и настроение. Мы собрали меню из любимых блюд и сделали
+                пространство, в котором приятно проводить и тихие вечера, и праздники.
+            </p>
+            <p>
+                Мы выбираем свежие продукты, работаем над подачей и стараемся,
+                чтобы каждый визит оставлял после себя хорошее впечатление.
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="section about-features">
+    <div class="container">
+        <div class="section-title">
+            <h2>Почему нас выбирают</h2>
+            <p>Несколько причин, по которым гости возвращаются снова.</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <h3>Авторская кухня</h3>
+                <p>Сочетаем классические блюда с современной подачей и вниманием к вкусу.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Уютная атмосфера</h3>
+                <p>Тёплый интерьер и спокойная музыка создают комфорт для любого вечера.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Свежие продукты</h3>
+                <p>Мы выбираем качественные ингредиенты и следим за стабильным вкусом блюд.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section about-team">
+    <div class="container about-team-grid">
+        <div class="about-team-text">
+            <span class="section-tag">Команда</span>
+            <h2>Люди, которые делают CityPark особенным</h2>
+            <p>
+                За каждым блюдом и каждым гостеприимным вечером стоит команда,
+                которая любит своё дело и следит за качеством на каждом этапе.
+            </p>
+            <ul class="about-list">
+                <li>Шеф-повар с любовью к деталям.</li>
+                <li>Внимательные официанты и администраторы.</li>
+                <li>Стабильный сервис и аккуратная подача.</li>
+            </ul>
+        </div>
+
+        <div class="about-team-image">
+            <img src="{% static 'img/about-team.jpg' %}" alt="Команда ресторана CityPark">
+        </div>
+    </div>
+</section>
+
+<section class="about-cta">
+    <div class="container about-cta-box">
+        <h2>Хотите познакомиться с нами лично?</h2>
+        <p>Посмотрите меню, выберите блюдо и забронируйте столик на удобное время.</p>
+        <div class="about-cta-actions">
+            <a class="btn" href="{% url 'menu' %}">Меню</a>
+            <a class="outline-btn" href="{% url 'booking' %}">Бронь</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

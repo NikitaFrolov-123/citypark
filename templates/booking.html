@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="booking-hero">
+    <div class="container">
+        <div class="booking-layout">
+            <div class="booking-info">
+                <span class="hero-kicker">Бронирование</span>
+                <h1>Забронируйте столик в CityPark</h1>
+                <p>Оставьте заявку, и мы подтвердим бронь как можно скорее.</p>
+
+                <div class="booking-benefits">
+                    <div class="booking-benefit">
+                        <strong>Удобно</strong>
+                        <p>Заполнение занимает меньше минуты.</p>
+                    </div>
+                    <div class="booking-benefit">
+                        <strong>Быстро</strong>
+                        <p>Мы свяжемся с вами после отправки формы.</p>
+                    </div>
+                    <div class="booking-benefit">
+                        <strong>Надёжно</strong>
+                        <p>Бронь сохраняется сразу в базе.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="booking-card">
+                <h2>Форма бронирования</h2>
+                <p>Укажите данные, и мы подготовим столик.</p>
+
+                <form method="post" class="booking-form" novalidate>
+                    {% csrf_token %}
+
+                    {% if form.non_field_errors %}
+                        <div class="form-errors">
+                            {{ form.non_field_errors }}
+                        </div>
+                    {% endif %}
+
+                    <div class="form-field">
+                        {{ form.name.label_tag }}
+                        {{ form.name }}
+                        {{ form.name.errors }}
+                    </div>
+
+                    <div class="form-field">
+                        {{ form.phone.label_tag }}
+                        {{ form.phone }}
+                        {{ form.phone.errors }}
+                    </div>
+
+                    <div class="form-field">
+                        {{ form.guests.label_tag }}
+                        {{ form.guests }}
+                        {{ form.guests.errors }}
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-field">
+                            {{ form.booking_date.label_tag }}
+                            {{ form.booking_date }}
+                            {{ form.booking_date.errors }}
+                        </div>
+
+                        <div class="form-field">
+                            {{ form.booking_time.label_tag }}
+                            {{ form.booking_time }}
+                            {{ form.booking_time.errors }}
+                        </div>
+                    </div>
+
+                    <button class="btn btn-full" type="submit">Забронировать</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

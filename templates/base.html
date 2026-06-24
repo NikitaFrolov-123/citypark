@@ -1,0 +1,97 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CityPark — {% block title %}Ресторан{% endblock %}</title>
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <a class="logo" href="{% url 'home' %}">CityPark</a>
+                <div class="menu">
+                    <a href="{% url 'home' %}">Главная</a>
+                    <a href="{% url 'menu' %}">Меню</a>
+                    <a href="{% url 'booking' %}">Бронь</a>
+                    <a href="{% url 'about' %}">О нас</a>
+                    <a href="{% url 'contacts' %}">Контакты</a>
+                </div>
+                <div class="nav-actions">
+                    <a class="btn" href="{% url 'register' %}">Регистрация</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    {% block content %}{% endblock %}
+
+    <footer class="footer">
+        <div class="footer-top">
+            <div class="container footer-grid">
+                <div class="footer-brand">
+                    <a class="footer-logo" href="{% url 'home' %}">CityPark</a>
+                    <p>Авторская кухня, уютная атмосфера и спокойные вечера в центре города.</p>
+                    <div class="footer-social">
+                        <a href="#"><span>📱</span></a>
+                        <a href="#"><span>📷</span></a>
+                        <a href="#"><span>🎬</span></a>
+                    </div>
+                </div>
+
+                <div class="footer-col">
+                    <h3>Навигация</h3>
+                    <a href="{% url 'home' %}">Главная</a>
+                    <a href="{% url 'menu' %}">Меню</a>
+                    <a href="{% url 'booking' %}">Бронь</a>
+                    <a href="{% url 'about' %}">О нас</a>
+                    <a href="{% url 'contacts' %}">Контакты</a>
+                </div>
+
+                <div class="footer-col">
+                    <h3>Контакты</h3>
+                    <div class="footer-contact">
+                        <div class="footer-contact-item">
+                            <span>📞</span>
+                            <a href="tel:+79990000000">+7 (999) 000-00-00</a>
+                        </div>
+                        <div class="footer-contact-item">
+                            <span>✉️</span>
+                            <a href="mailto:hello@citypark.ru">hello@citypark.ru</a>
+                        </div>
+                        <div class="footer-contact-item">
+                            <span>📍</span>
+                            <p>ул. Примерная, 15</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="footer-col">
+                    <h3>Информация</h3>
+                    <a href="{% url 'booking' %}">Бронирование</a>
+                    <a href="{% url 'menu' %}">Доставка</a>
+                    <a href="{% url 'contacts' %}">Отзывы</a>
+                    <a href="#">Политика</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="container footer-bottom">
+            <p>© 2026 CityPark. Все права защищены.</p>
+            <div class="footer-links">
+                <a href="#">Политика конфиденциальности</a>
+                <a href="#">Условия использования</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{% static 'js/cart.js' %}"></script>
+    <script src="{% static 'js/menu.js' %}"></script>
+</body>
+</html>
