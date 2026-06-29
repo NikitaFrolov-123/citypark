@@ -21,7 +21,6 @@ INSTALLED_APPS = [
     'main',
     'menu',
     'reviews',
-    'siteconfig',
 ]
 
 MIDDLEWARE = [
@@ -47,6 +46,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.media',
+                'cart.context_processors.cart_context',
             ],
         },
     },

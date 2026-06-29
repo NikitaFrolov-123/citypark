@@ -12,13 +12,13 @@
 <section class="menu-section">
     <div class="container">
         <div class="menu-search">
-            <input type="text" class="search-input" id="searchDishes" placeholder="🔍 Поиск по названию блюда...">
+            <input type="text" class="search-input" id="searchDishes" placeholder="Поиск по названию блюда...">
         </div>
 
         <div class="menu-filters">
-            <button class="filter-btn active" data-category="all">Все</button>
+            <button type="button" class="filter-btn active" data-category="all">Все</button>
             {% for category in categories %}
-            <button class="filter-btn" data-category="{{ category.slug }}">{{ category.name }}</button>
+            <button type="button" class="filter-btn" data-category="{{ category.slug }}">{{ category.name }}</button>
             {% endfor %}
         </div>
 
@@ -35,7 +35,9 @@
         <div class="menu-grid" id="dishesGrid">
             {% if dishes %}
                 {% for dish in dishes %}
-                <article class="dish-card" data-category="{% if dish.category %}{{ dish.category.slug }}{% else %}none{% endif %}" data-dish-name="{{ dish.name }}">
+                <article class="dish-card"
+                         data-category="{% if dish.category %}{{ dish.category.slug }}{% else %}none{% endif %}"
+                         data-dish-name="{{ dish.name }}">
                     <a href="{% url 'dish_detail' dish.id %}" class="dish-link">
                         <div class="dish-image">
                             {% if dish.image %}
@@ -49,7 +51,7 @@
                             <div class="dish-header">
                                 <h3>{{ dish.name }}</h3>
                                 {% if dish.is_popular %}
-                                    <span class="popular-tag">⭐ Популярное</span>
+                                    <span class="popular-tag">Популярное</span>
                                 {% endif %}
                             </div>
 
@@ -58,7 +60,6 @@
                             {% with reviews_count=dish.reviews.count %}
                             {% if reviews_count > 0 %}
                             <div class="dish-rating">
-                                <span class="rating-stars">⭐⭐⭐⭐⭐</span>
                                 <span class="rating-count">({{ reviews_count }} отзывов)</span>
                             </div>
                             {% endif %}
@@ -70,7 +71,7 @@
 
                             {% if not dish.is_available %}
                             <div class="dish-unavailable">
-                                <span>⚠️ Сейчас недоступно</span>
+                                <span>Сейчас недоступно</span>
                             </div>
                             {% endif %}
                         </div>
@@ -78,13 +79,12 @@
 
                     <div class="dish-actions">
                         <div class="quantity-control">
-                            <button class="qty-btn qty-minus" data-dish-id="{{ dish.id }}">-</button>
-                            <input type="number" class="qty-input" value="1" min="1" max="10" data-dish-id="{{ dish.id }}">
-                            <button class="qty-btn qty-plus" data-dish-id="{{ dish.id }}">+</button>
+                            <button type="button" class="qty-btn qty-minus">-</button>
+                            <input type="number" class="qty-input" value="1" min="1" max="10">
+                            <button type="button" class="qty-btn qty-plus">+</button>
                         </div>
 
-                        <button class="add-to-cart-btn" data-dish-id="{{ dish.id }}" data-quantity="1">
-                            <span class="btn-icon">🛒</span>
+                        <button type="button" class="add-to-cart-btn" data-dish-id="{{ dish.id }}">
                             <span class="btn-text">В корзину</span>
                         </button>
                     </div>

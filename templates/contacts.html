@@ -2,61 +2,120 @@
 {% load static %}
 
 {% block content %}
-<section class="contacts-page" id="top">
-    <div class="container contacts-hero">
-        <p class="contacts-kicker">Contacts</p>
-        <h1>CityPark</h1>
-        <p class="contacts-lead">
-            Премиальный ресторан в Москве с атмосферой уюта, сильной кухней и вниманием к деталям.
-        </p>
-    </div>
+<section class="contacts-hero">
+    <div class="container contacts-hero-grid">
+        <div class="contacts-hero-text">
+            <span class="hero-kicker">Контакты</span>
+            <h1>Свяжитесь с нами удобным способом</h1>
+            <p>
+                Мы всегда рады помочь с бронированием стола, уточнением меню и организацией
+                вашего визита в ресторан CityPark.
+            </p>
+        </div>
 
+        <div class="contacts-hero-card">
+            <div class="contact-info-item">
+                <div>
+                    <strong>Адрес</strong>
+                    <p>ул. Примерная, 15</p>
+                </div>
+            </div>
+            <div class="contact-info-item">
+                <div>
+                    <strong>Телефон</strong>
+                    <p><a href="tel:+79183119791">+7-918-311-97-91</a></p>
+                </div>
+            </div>
+            <div class="contact-info-item">
+                <div>
+                    <strong>Email</strong>
+                    <p><a href="mailto:belcitypark@mail.ru">belcitypark@mail.ru</a></p>
+                </div>
+            </div>
+            <div class="contact-info-item">
+                <div>
+                    <strong>Время работы</strong>
+                    <p>Круглосуточно</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section contacts-section">
     <div class="container contacts-layout">
-        <div class="contacts-card">
-            <h2>Адрес</h2>
-            <p>г. Москва, 1-й Красногвардейский проезд, 15</p>
-            <p>Москва-Сити, башня Меркурий, 8-й этаж</p>
-            <a class="contacts-link" href="#">Построить маршрут</a>
+        <div class="contacts-form-block">
+            <span class="section-tag">Напишите нам</span>
+            <h2>Форма обратной связи</h2>
+            <p>
+                Оставьте сообщение, и мы ответим вам в ближайшее время.
+            </p>
+
+            <form class="contacts-form" method="post">
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="form-errors">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                <div class="form-row">
+                    <div class="form-field">
+                        {{ form.name.label_tag }}
+                        {{ form.name }}
+                        {{ form.name.errors }}
+                    </div>
+                    <div class="form-field">
+                        {{ form.phone.label_tag }}
+                        {{ form.phone }}
+                        {{ form.phone.errors }}
+                    </div>
+                </div>
+
+                <div class="form-field">
+                    {{ form.email.label_tag }}
+                    {{ form.email }}
+                    {{ form.email.errors }}
+                </div>
+
+                <div class="form-field">
+                    {{ form.subject.label_tag }}
+                    {{ form.subject }}
+                    {{ form.subject.errors }}
+                </div>
+
+                <div class="form-field">
+                    {{ form.message.label_tag }}
+                    {{ form.message }}
+                    {{ form.message.errors }}
+                </div>
+
+                <button type="submit" class="btn btn-full">Отправить сообщение</button>
+            </form>
         </div>
 
-        <div class="contacts-card">
-            <h2>Часы работы</h2>
-            <ul class="contacts-list">
-                <li>Пн–Чт: 12:00 — 00:00</li>
-                <li>Пт: 12:00 — 02:00</li>
-                <li>Сб: 12:00 — 02:00</li>
-                <li>Вс: 12:00 — 00:00</li>
-            </ul>
-        </div>
+        <div class="contacts-side">
+            <div class="contacts-box">
+                <span class="section-tag">Контакты</span>
+                <h2>Как нас найти</h2>
+                <p>
+                    Мы находимся в центре города, рядом с удобной парковкой и остановкой общественного транспорта.
+                </p>
+            </div>
 
-        <div class="contacts-card">
-            <h2>Телефон</h2>
-            <a class="phone" href="tel:+74952275558">+7 (495) 227-55-58</a>
-            <p>Бронь столиков, доставка, вопросы по банкетам.</p>
+            <div class="map-frame">
+                <iframe
+                    src="https://www.google.com/maps?q=Краснодарский%20край,%20г.%20Белореченск,%20ул.%20Гоголя,%2061&output=embed"
+                    width="100%"
+                    height="100%"
+                    style="border:0;"
+                    allowfullscreen=""
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
         </div>
-
-        <div class="contacts-card">
-            <h2>Email</h2>
-            <a class="contacts-link" href="mailto:info@citypark.ru">info@citypark.ru</a>
-            <p>Пишите по вопросам бронирования, сотрудничества и мероприятий.</p>
-        </div>
-    </div>
-
-    <div class="container contacts-map-wrap">
-        <div class="contacts-card map-card">
-            <h2>Как нас найти</h2>
-            <p>Мы находимся в деловом центре города, рядом с метро и удобной парковкой.</p>
-            <iframe
-                class="contacts-map"
-                src="https://www.google.com/maps?q=1-%D0%B9%20%D0%9A%D1%80%D0%B0%D1%81%D0%BD%D0%BE%D0%B3%D0%B2%D0%B0%D1%80%D0%B4%D0%B5%D0%B9%D1%81%D0%BA%D0%B8%D0%B9%20%D0%BF%D1%80%D0%BE%D0%B5%D0%B7%D0%B4%2C%2015%2C%20%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0&output=embed"
-                loading="lazy"
-                referrerpolicy="no-referrer-when-downgrade"></iframe>
-        </div>
-    </div>
-
-    <div class="container contacts-actions">
-        <a class="btn" href="{% url 'booking' %}">Забронировать столик</a>
-        <a class="outline-btn" href="#top">Наверх</a>
     </div>
 </section>
 {% endblock %}

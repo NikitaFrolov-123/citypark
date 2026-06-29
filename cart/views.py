@@ -1,6 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from menu.models import Dish
+from .cart import Cart
 import json
 
 
@@ -13,60 +14,27 @@ def add_to_cart(request):
         dish_id = data.get('dish_id')
         quantity = int(data.get('quantity', 1))
 
-        dish = Dish.objects.get(id=dish_id)
-        cart = request.session.get('cart', {})
-
-        if str(dish_id) in cart:
-            cart[str(dish_id)]['quantity'] += quantity
-        else:
-            cart[str(dish_id)] = {
-                'dish_id': dish_id,
-                'name': dish.name,
-                'price': int(dish.price),
-                'quantity': quantity
-            }
-
-        request.session['cart'] = cart
-        request.session.modified = True
-
-        cart_count = sum(item['quantity'] for item in cart.values())
+        dish = get_object_or_404(Dish, id=dish_id)
+        cart = Cart(request)
+        cart.add(dish=dish, quantity=quantity)
 
         return JsonResponse({
             'success': True,
             'message': 'Блюдо добавлено в корзину',
-            'cart_count': cart_count
+            'cart_count': len(cart),
+            'cart_total': str(cart.get_total_price()),
         })
-
-    except Dish.DoesNotExist:
-        return JsonResponse({'success': False, 'message': 'Блюдо не найдено'}, status=404)
     except Exception as e:
         return JsonResponse({'success': False, 'message': str(e)}, status=500)
 
 
 def cart(request):
-    cart_data = request.session.get('cart', {})
-    dishes = []
-    total = 0
+    cart_obj = Cart(request)
+    dishes = list(cart_obj)
 
-    for item in cart_data.values():
-        try:
-            dish = Dish.objects.get(id=item['dish_id'])
-            quantity = int(item['quantity'])
-            price = int(item['price'])
-            item_total = price * quantity
-            dishes.append({
-                'dish': dish,
-                'quantity': quantity,
-                'price': price,
-                'total': item_total
-            })
-            total += item_total
-        except Dish.DoesNotExist:
-            continue
-
-    return render(request, 'cart.html', {
+    return render(request, 'cart_detail.html', {
         'dishes': dishes,
-        'total': total
+        'total': cart_obj.get_total_price(),
     })
 
 
@@ -76,16 +44,18 @@ def remove_from_cart(request):
 
     try:
         data = json.loads(request.body.decode('utf-8'))
-        dish_id = str(data.get('dish_id'))
+        dish_id = data.get('dish_id')
+        dish = get_object_or_404(Dish, id=dish_id)
 
-        cart = request.session.get('cart', {})
+        cart = Cart(request)
+        cart.remove(dish)
 
-        if dish_id in cart:
-            del cart[dish_id]
-            request.session['cart'] = cart
-            request.session.modified = True
-
-        return JsonResponse({'success': True, 'message': 'Блюдо удалено из корзины'})
+        return JsonResponse({
+            'success': True,
+            'message': 'Блюдо удалено из корзины',
+            'cart_count': len(cart),
+            'cart_total': str(cart.get_total_price()),
+        })
     except Exception as e:
         return JsonResponse({'success': False, 'message': str(e)}, status=500)
 
@@ -99,13 +69,30 @@ def update_quantity(request):
         dish_id = str(data.get('dish_id'))
         quantity = int(data.get('quantity', 1))
 
-        cart = request.session.get('cart', {})
+        dish = get_object_or_404(Dish, id=dish_id)
+        cart = Cart(request)
+        cart.add(dish=dish, quantity=quantity, override_quantity=True)
 
-        if dish_id in cart:
-            cart[dish_id]['quantity'] = quantity
-            request.session['cart'] = cart
-            request.session.modified = True
-
-        return JsonResponse({'success': True, 'message': 'Количество обновлено'})
+        return JsonResponse({
+            'success': True,
+            'message': 'Количество обновлено',
+            'cart_count': len(cart),
+            'cart_total': str(cart.get_total_price()),
+        })
     except Exception as e:
         return JsonResponse({'success': False, 'message': str(e)}, status=500)
+
+
+def clear_cart(request):
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'message': 'Неверный метод запроса'}, status=400)
+
+    cart = Cart(request)
+    cart.clear()
+
+    return JsonResponse({
+        'success': True,
+        'message': 'Корзина очищена',
+        'cart_count': 0,
+        'cart_total': '0',
+    })

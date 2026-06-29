@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="cart-hero">
+    <div class="container">
+        <h1>Корзина</h1>
+        <p>Проверьте выбранные блюда перед оформлением заказа.</p>
+    </div>
+</section>
+
+<section class="cart-page">
+    <div class="container">
+        {% if dishes %}
+            <div class="cart-list">
+                {% for item in dishes %}
+                <div class="cart-item">
+                    <div class="cart-item-image">
+                        {% if item.dish.image %}
+                            <img src="{{ item.dish.image.url }}" alt="{{ item.dish.name }}">
+                        {% else %}
+                            <img src="{% static 'img/hero.jpg' %}" alt="{{ item.dish.name }}">
+                        {% endif %}
+                    </div>
+
+                    <div class="cart-item-info">
+                        <h3>{{ item.dish.name }}</h3>
+                        <p>{{ item.dish.description }}</p>
+                        <div class="cart-meta">
+                            <span>{{ item.price }} ₽</span>
+                            <span>Всего: {{ item.total_price }} ₽</span>
+                        </div>
+
+                        <div class="cart-quantity">
+                            <button class="qty-btn qty-minus" data-dish-id="{{ item.dish.id }}">-</button>
+                            <input type="number" class="qty-input" value="{{ item.quantity }}" min="1" max="10" data-dish-id="{{ item.dish.id }}">
+                            <button class="qty-btn qty-plus" data-dish-id="{{ item.dish.id }}">+</button>
+                        </div>
+                    </div>
+
+                    <div class="cart-item-actions">
+                        <button class="remove-from-cart-btn" data-dish-id="{{ item.dish.id }}">Удалить</button>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="cart-summary">
+                <div>
+                    <h2>Итого: {{ total }} ₽</h2>
+                </div>
+                <div class="cart-actions">
+                    <a href="{% url 'menu' %}" class="outline-btn">В меню</a>
+                    <button class="btn clear-cart-btn" type="button">Очистить корзину</button>
+                </div>
+            </div>
+        {% else %}
+            <div class="cart-empty">
+                <h2>Корзина пуста</h2>
+                <p>Сначала добавьте блюда из меню.</p>
+                <a href="{% url 'menu' %}" class="btn">Перейти в меню</a>
+            </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
