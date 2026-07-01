@@ -60,33 +60,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     document.addEventListener('click', function(e) {
-        const minusBtn = e.target.closest('.qty-minus');
-        const plusBtn = e.target.closest('.qty-plus');
-
-        if (!minusBtn && !plusBtn) return;
-
-        e.preventDefault();
-
-        const control = e.target.closest('.quantity-control');
-        const input = control ? control.querySelector('.qty-input') : null;
-        if (!input) return;
-
-        let value = parseInt(input.value, 10) || 1;
-        if (minusBtn) value = Math.max(1, value - 1);
-        if (plusBtn) value = Math.min(10, value + 1);
-        input.value = value;
-    });
-
-    document.addEventListener('click', function(e) {
         const addBtn = e.target.closest('.add-to-cart-btn');
         if (!addBtn) return;
 
         e.preventDefault();
 
         const dishId = addBtn.getAttribute('data-dish-id');
-        const control = addBtn.closest('.dish-actions')?.querySelector('.quantity-control');
-        const quantityInput = control?.querySelector('.qty-input');
-        const quantity = quantityInput ? parseInt(quantityInput.value, 10) || 1 : 1;
 
         fetch('/cart/add/', {
             method: 'POST',
@@ -97,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             body: JSON.stringify({
                 dish_id: dishId,
-                quantity: quantity
+                quantity: 1
             })
         })
         .then(async response => {
@@ -116,7 +95,7 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(error => {
             console.error(error);
-            alert('Ошибка обновления количества / добавления в корзину');
+            alert('Ошибка добавления в корзину');
         });
     });
 

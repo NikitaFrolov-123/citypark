@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block title %}Вход{% endblock %}
+
+{% block content %}
+<section class="auth-section">
+    <div class="auth-background"></div>
+    <div class="container">
+        <div class="auth-layout">
+            <div class="auth-info">
+                <span class="section-tag">CityPark</span>
+                <h1>Вход в личный кабинет</h1>
+                <p>
+                    Войдите в аккаунт, чтобы оформлять заказы, сохранять блюда в избранное
+                    и быстро повторять любимые покупки.
+                </p>
+
+                <div class="auth-points">
+                    <div class="auth-point">
+                        <strong>Быстрый заказ</strong>
+                        <p>Повторяйте любимые блюда в один клик.</p>
+                    </div>
+                    <div class="auth-point">
+                        <strong>Избранное</strong>
+                        <p>Сохраняйте блюда, которые хотите заказать позже.</p>
+                    </div>
+                    <div class="auth-point">
+                        <strong>История</strong>
+                        <p>Смотрите все свои прошлые заказы и статусы.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="auth-card">
+                <h2>Войти</h2>
+                <p>Введите логин и пароль для доступа к аккаунту.</p>
+
+                <form method="post" class="auth-form">
+                    {% csrf_token %}
+
+                    {% if form.non_field_errors %}
+                        <div class="form-errors">
+                            {{ form.non_field_errors }}
+                        </div>
+                    {% endif %}
+
+                    <div class="form-field">
+                        <label for="{{ form.username.id_for_label }}">Логин</label>
+                        {{ form.username }}
+                        {{ form.username.errors }}
+                    </div>
+
+                    <div class="form-field">
+                        <label for="{{ form.password.id_for_label }}">Пароль</label>
+                        {{ form.password }}
+                        {{ form.password.errors }}
+                    </div>
+
+                    <button type="submit" class="btn btn-full">Войти</button>
+                </form>
+
+                <div class="auth-footer">
+                    <span>Ещё нет аккаунта?</span>
+                    <a href="{% url 'register' %}">Зарегистрироваться</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

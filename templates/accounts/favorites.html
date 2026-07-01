@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}Избранное{% endblock %}
+
+{% block content %}
+<section class="favorites-page">
+    <div class="favorites-hero">
+        <div class="container">
+            <div class="favorites-hero-card">
+                <span class="section-tag">Избранное</span>
+                <h1>Сохранённые блюда</h1>
+                <p>Здесь собраны все блюда, которые вы добавили в избранное.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="favorites-grid">
+            {% for item in favorites %}
+                <article class="favorite-dish-card">
+                    <div class="favorite-dish-image">
+                        {% if item.dish.image %}
+                            <img src="{{ item.dish.image.url }}" alt="{{ item.dish.name }}">
+                        {% endif %}
+                    </div>
+
+                    <div class="favorite-dish-body">
+                        <div class="favorite-dish-top">
+                            <h2>{{ item.dish.name }}</h2>
+                            <div class="favorite-dish-price">{{ item.dish.price }} ₽</div>
+                        </div>
+
+                        <p>{{ item.dish.description }}</p>
+
+                        <div class="favorite-dish-actions">
+                            <a href="{% url 'dish_detail' item.dish.id %}" class="btn">Открыть</a>
+
+                            <form method="post" action="{% url 'toggle_favorite' item.dish.id %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="next" value="{% url 'favorites' %}">
+                                <button type="submit" class="outline-btn">Убрать</button>
+                            </form>
+                        </div>
+                    </div>
+                </article>
+            {% empty %}
+                <div class="favorites-empty">
+                    <h2>Пока нет избранных блюд</h2>
+                    <p>Добавляйте блюда в избранное, чтобы видеть их здесь.</p>
+                    <a href="{% url 'menu' %}" class="btn">Перейти в меню</a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

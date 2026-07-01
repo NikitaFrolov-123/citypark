@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+
+{% block title %}Профиль{% endblock %}
+
+{% block content %}
+<section class="profile-page">
+    <div class="profile-hero">
+        <div class="container">
+            <div class="profile-hero-card">
+                <div class="profile-avatar">
+                    <span>{{ request.user.username|first|upper }}</span>
+                </div>
+
+                <div class="profile-hero-info">
+                    <span class="section-tag">Личный кабинет</span>
+                    <h1>{{ request.user.username }}</h1>
+                    <p>
+                        Здесь вы можете обновить данные профиля, посмотреть избранные блюда
+                        и отследить историю заказов.
+                    </p>
+                </div>
+
+                <div class="profile-hero-stats">
+                    <div class="profile-stat">
+                        <strong>{{ favorites|length }}</strong>
+                        <span>Избранное</span>
+                    </div>
+                    <div class="profile-stat">
+                        <strong>{{ orders|length }}</strong>
+                        <span>Заказы</span>
+                    </div>
+                    <div class="profile-stat">
+                        <strong>{% if profile.phone %}Да{% else %}Нет{% endif %}</strong>
+                        <span>Телефон</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container profile-grid">
+        <div class="profile-main">
+            <div class="profile-card">
+                <div class="profile-card-head">
+                    <h2>Данные профиля</h2>
+                    <p>Обновите номер телефона и адрес доставки.</p>
+                </div>
+
+                <form method="post" class="profile-form">
+                    {% csrf_token %}
+
+                    {% if form.non_field_errors %}
+                        <div class="form-errors">
+                            {{ form.non_field_errors }}
+                        </div>
+                    {% endif %}
+
+                    {% for field in form %}
+                        <div class="form-field">
+                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                            {{ field }}
+                            {{ field.errors }}
+                        </div>
+                    {% endfor %}
+
+                    <button type="submit" class="btn btn-full">Сохранить изменения</button>
+                </form>
+            </div>
+
+            <div class="profile-card">
+                <div class="profile-card-head">
+                    <h2>История заказов</h2>
+                    <p>Последние заказы и их статусы.</p>
+                </div>
+
+                <div class="orders-list">
+                    {% for order in orders %}
+                        <div class="order-card">
+                            <div class="order-top">
+                                <div>
+                                    <strong>Заказ #{{ order.id }}</strong>
+                                    <span>{{ order.created_at|date:"d.m.Y H:i" }}</span>
+                                </div>
+                                <div class="order-status status-{{ order.status }}">
+                                    {{ order.get_status_display }}
+                                </div>
+                            </div>
+
+                            <div class="order-meta">
+                                <div>
+                                    <span>Получатель</span>
+                                    <strong>{{ order.full_name }}</strong>
+                                </div>
+                                <div>
+                                    <span>Телефон</span>
+                                    <strong>{{ order.phone }}</strong>
+                                </div>
+                                <div>
+                                    <span>Сумма</span>
+                                    <strong>{{ order.total }} ₽</strong>
+                                </div>
+                            </div>
+
+                            <div class="order-items">
+                                {% for item in order.items.all %}
+                                    <div class="order-item">
+                                        <div class="order-item-name">{{ item.name }}</div>
+                                        <div class="order-item-details">
+                                            {{ item.quantity }} × {{ item.price }} ₽
+                                        </div>
+                                    </div>
+                                {% empty %}
+                                    <p class="empty-text">В заказе нет позиций.</p>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% empty %}
+                        <div class="empty-state">
+                            <h3>Пока нет заказов</h3>
+                            <p>Сделайте первый заказ, и он появится здесь.</p>
+                            <a href="{% url 'menu' %}" class="btn">Перейти в меню</a>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <aside class="profile-sidebar">
+            <div class="profile-card">
+                <div class="profile-card-head">
+                    <h2>Избранное</h2>
+                    <p>Ваши сохранённые блюда.</p>
+                </div>
+
+                <div class="favorites-list">
+                    {% for item in favorites %}
+                        <div class="favorite-card">
+                            <div class="favorite-card-info">
+                                <strong>{{ item.dish.name }}</strong>
+                                <span>{{ item.dish.price }} ₽</span>
+                            </div>
+
+                            <form method="post" action="{% url 'toggle_favorite' item.dish.id %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="next" value="{% url 'profile' %}">
+                                <button type="submit" class="outline-btn favorite-remove-btn">Убрать</button>
+                            </form>
+                        </div>
+                    {% empty %}
+                        <div class="empty-state empty-state-small">
+                            <h3>Пусто</h3>
+                            <p>Добавьте блюда в избранное, чтобы видеть их здесь.</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="profile-card profile-note">
+                <span class="section-tag">Совет</span>
+                <p>
+                    Заполните телефон и адрес, чтобы оформление будущих заказов занимало меньше времени.
+                </p>
+            </div>
+        </aside>
+    </div>
+</section>
+{% endblock %}

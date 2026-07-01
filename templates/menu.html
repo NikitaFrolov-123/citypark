@@ -78,11 +78,14 @@
                     </a>
 
                     <div class="dish-actions">
-                        <div class="quantity-control">
-                            <button type="button" class="qty-btn qty-minus">-</button>
-                            <input type="number" class="qty-input" value="1" min="1" max="10">
-                            <button type="button" class="qty-btn qty-plus">+</button>
-                        </div>
+                        <form method="post" action="{% url 'toggle_favorite' dish.id %}" class="favorite-form">
+                            {% csrf_token %}
+                            <input type="hidden" name="next" value="{{ request.path }}">
+                            <button type="submit" class="favorite-btn">
+                                <span class="fav-icon">❤</span>
+                                <span class="fav-text">Избранное</span>
+                            </button>
+                        </form>
 
                         <button type="button" class="add-to-cart-btn" data-dish-id="{{ dish.id }}">
                             <span class="btn-text">В корзину</span>
@@ -92,7 +95,7 @@
                 {% endfor %}
             {% else %}
                 <div class="menu-empty">
-                    <p>В меню пока нет блюд.</p>
+                    <p>В меню пока нет блюд</p>
                 </div>
             {% endif %}
         </div>

@@ -1,11 +1,13 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block title %}{{ dish.name }}{% endblock %}
+
 {% block content %}
-<section class="section">
+<section class="dish-detail-section">
     <div class="container">
-        <div class="dish-detail">
-            <div class="dish-detail-image">
+        <div class="dish-detail-card">
+            <div class="dish-detail-media">
                 {% if dish.image %}
                     <img src="{{ dish.image.url }}" alt="{{ dish.name }}">
                 {% else %}
@@ -13,42 +15,76 @@
                 {% endif %}
             </div>
 
-            <div class="dish-detail-info">
-                <div class="dish-detail-header">
-                    <h1>{{ dish.name }}</h1>
-                    {% if dish.is_popular %}
-                        <span class="popular-tag">Популярное</span>
+            <div class="dish-detail-content">
+                {% if dish.category %}
+                <div class="dish-detail-badge">
+                    <a href="{% url 'menu' %}?category={{ dish.category.slug }}">{{ dish.category.name }}</a>
+                </div>
+                {% endif %}
+
+                <h1>{{ dish.name }}</h1>
+                <p class="dish-detail-description">{{ dish.description }}</p>
+
+                <div class="dish-detail-meta">
+                    <div class="dish-detail-price">{{ dish.price }} ₽</div>
+
+                    {% if dish.is_available %}
+                        <span class="dish-status available">В наличии</span>
+                    {% else %}
+                        <span class="dish-status unavailable">Сейчас недоступно</span>
                     {% endif %}
                 </div>
 
-                <p class="dish-detail-description">{{ dish.description }}</p>
+                <div class="dish-detail-actions">
+                    {% if user.is_authenticated %}
+                        <button type="button" class="add-to-cart-btn" data-dish-id="{{ dish.id }}">
+                            <span class="btn-text">В корзину</span>
+                        </button>
 
-                {% if dish.category %}
-                <div class="dish-detail-category">
-                    <span>Категория:</span>
-                    <a href="{% url 'menu' %}">{{ dish.category.name }}</a>
+                        <form method="post" action="{% url 'toggle_favorite' dish.id %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="next" value="{{ request.path }}">
+                            <button type="submit" class="favorite-btn">
+                                {% if dish.id in user_favorite_ids %}
+                                    Убрать из избранного
+                                {% else %}
+                                    В избранное
+                                {% endif %}
+                            </button>
+                        </form>
+                    {% else %}
+                        <a href="{% url 'login' %}?next={{ request.path }}" class="add-to-cart-btn">
+                            <span class="btn-text">В корзину</span>
+                        </a>
+
+                        <a href="{% url 'login' %}?next={{ request.path }}" class="favorite-btn">
+                            В избранное
+                        </a>
+                    {% endif %}
                 </div>
-                {% endif %}
 
-                <div class="dish-detail-price">
-                    <span>{{ dish.price }} ₽</span>
+                <div class="dish-detail-note">
+                    Свежая подача, быстрая отдача и аккуратная упаковка.
                 </div>
+            </div>
+        </div>
 
-                {% if not dish.is_available %}
-                <div class="dish-unavailable">
-                    <span>Сейчас недоступно</span>
-                </div>
-                {% endif %}
+        <div class="dish-detail-extra">
+            <div class="detail-info-box">
+                <h2>О блюде</h2>
+                <p>
+                    Это блюдо подаётся с акцентом на вкус, текстуру и внешний вид.
+                    Хорошо подходит для обеда, ужина или заказа на вынос.
+                </p>
+            </div>
 
-                <div class="quantity-control">
-                    <button class="qty-btn qty-minus" data-dish-id="{{ dish.id }}">-</button>
-                    <input type="number" class="qty-input" value="1" min="1" max="10" data-dish-id="{{ dish.id }}">
-                    <button class="qty-btn qty-plus" data-dish-id="{{ dish.id }}">+</button>
-                </div>
-
-                <button class="add-to-cart-btn" data-dish-id="{{ dish.id }}" data-quantity="1">
-                    <span class="btn-text">В корзину</span>
-                </button>
+            <div class="detail-info-box">
+                <h2>Почему выбирают</h2>
+                <ul>
+                    <li>Натуральные ингредиенты.</li>
+                    <li>Стабильное качество каждой порции.</li>
+                    <li>Удобно добавить в корзину в один клик.</li>
+                </ul>
             </div>
         </div>
     </div>

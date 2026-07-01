@@ -1,8 +1,8 @@
-from django.shortcuts import render, get_object_or_404
+import json
 from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, render
 from menu.models import Dish
 from .cart import Cart
-import json
 
 
 def add_to_cart(request):
@@ -13,6 +13,9 @@ def add_to_cart(request):
         data = json.loads(request.body.decode('utf-8'))
         dish_id = data.get('dish_id')
         quantity = int(data.get('quantity', 1))
+
+        if quantity < 1:
+            quantity = 1
 
         dish = get_object_or_404(Dish, id=dish_id)
         cart = Cart(request)
@@ -66,8 +69,11 @@ def update_quantity(request):
 
     try:
         data = json.loads(request.body.decode('utf-8'))
-        dish_id = str(data.get('dish_id'))
+        dish_id = data.get('dish_id')
         quantity = int(data.get('quantity', 1))
+
+        if quantity < 1:
+            quantity = 1
 
         dish = get_object_or_404(Dish, id=dish_id)
         cart = Cart(request)

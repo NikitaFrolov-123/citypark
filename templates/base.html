@@ -25,8 +25,15 @@
                     <a href="{% url 'cart:cart' %}">Корзина</a>
                 </div>
                 <div class="nav-actions">
-                    <a class="btn" href="{% url 'register' %}">Регистрация</a>
-                </div>
+    {% if user.is_authenticated %}
+        <a href="{% url 'favorites' %}" class="outline-btn">Избранное</a>
+        <a class="btn" href="{% url 'profile' %}">Профиль</a>
+        <a class="outline-btn" href="{% url 'logout' %}">Выйти</a>
+    {% else %}
+        <a class="outline-btn" href="{% url 'login' %}">Войти</a>
+        <a class="btn" href="{% url 'register' %}">Регистрация</a>
+    {% endif %}
+</div>
             </nav>
         </div>
     </header>
